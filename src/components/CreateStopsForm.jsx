@@ -1,7 +1,7 @@
 import { useFieldArray } from 'react-hook-form'
 import { Input } from '@/components/Input'
 
-export const CreateTripForm = ({ tripIndex, control, register }) => {
+export const CreateStopsForm = ({ tripIndex, control, register }) => {
   const {
     fields: stops,
     remove,
@@ -30,7 +30,12 @@ export const CreateTripForm = ({ tripIndex, control, register }) => {
           return (
             <li
               key={stop.id}
-              style={{ display: 'flex', alignItems: 'start', gap: '10px' }}
+              style={{
+                border: '1px solid gray',
+                padding: '10px',
+                margin: '10px',
+                backgroundColor: 'lightgray',
+              }}
             >
               <div>
                 <h4>{`stop ${stopIndex}`}</h4>
@@ -59,7 +64,6 @@ export const CreateTripForm = ({ tripIndex, control, register }) => {
                   name={`trips[${tripIndex}].stops[${stopIndex}].arrivalAddress`}
                   register={register}
                 />
-                <hr />
               </div>
             </li>
           )

@@ -1,11 +1,11 @@
-import { useForm, useFieldArray, Controller } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 
 import { Switch } from '@/components/Switch'
 import { Section, SubSection } from '@/components/Section'
 import { Input } from '@/components/Input'
 import { MultiChoiceList } from '@/components/MultiChoiceList'
 import { SingleChoiceList } from '@/components/SingleChoiceList'
-import { CreateTripForm } from './components/CreateTripForm'
+import { CreateTripsForm } from '@/components/CreateTripsForm'
 
 export const CreateVehicleForm = () => {
   const { register, handleSubmit, control } = useForm()
@@ -73,36 +73,7 @@ export const CreateVehicleForm = () => {
           register={register}
         />
       </Section>
-      <Section name="schedule">
-        <button
-          type="button"
-          onClick={() => {
-            append()
-          }}
-        >
-          append trip
-        </button>
-        <ul>
-          {fields.map((trip, tripIndex) => (
-            <li
-              style={{
-                border: '1px solid gray',
-                padding: '10px',
-                margin: '10px',
-              }}
-              key={trip.id}
-            >
-              <h3>
-                <u>{`trip ${tripIndex}`}</u>
-              </h3>
-              <button type="button" onClick={() => remove(tripIndex)}>
-                delete trip
-              </button>
-              <CreateTripForm {...{ control, register, tripIndex }} />
-            </li>
-          ))}
-        </ul>
-      </Section>
+      <CreateTripsForm {...{ control, register }} />
       <Section name="actions">
         <button type="submit">create</button>
       </Section>
