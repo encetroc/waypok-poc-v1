@@ -1,12 +1,9 @@
-import { useState } from 'react'
-import { createVehicle } from '@/firebase/firestore'
-import { CreateVehicleForm } from '@/CreateVehicleForm'
-import './App.css'
+import { Router } from '@/router'
 
 function App() {
   return (
     <div className="App">
-      <CreateVehicleForm />
+      <Router />
     </div>
   )
 }

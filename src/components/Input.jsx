@@ -5,7 +5,7 @@ export const Input = ({ type, name, disabled = false, register }) => {
       {type === 'textarea' ? (
         <textarea disabled={disabled} id={name} {...register(name)} />
       ) : (
-        <input disabled={disabled} type={type} id={name} {...register(name)} />
+        <input {...{ disabled, type }} id={name} {...register(name)} />
       )}
     </div>
   )
