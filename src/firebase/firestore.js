@@ -21,7 +21,7 @@ export const createVehicle = async (vehicle) => {
 }
 
 export const createStops = async (vehicleId, stops) => {
-  if (vehicleId === 1) return
+  if (vehicleId === '') return
   try {
     const batch = writeBatch(db)
     stops.forEach((stop) => {

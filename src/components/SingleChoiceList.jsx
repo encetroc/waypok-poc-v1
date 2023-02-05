@@ -5,16 +5,16 @@ export const SingleChoiceList = ({
   register,
 }) => {
   return (
-    <fieldset>
+    <div className="flex flex-col gap-1">
       <legend>{name}</legend>
       <ul>
         {values.map((value) => (
-          <li key={value}>
+          <li className="flex gap-2" key={value}>
             <input type="radio" id={value} value={value} {...register(name)} />
             <label htmlFor={value}>{value}</label>
           </li>
         ))}
       </ul>
-    </fieldset>
+    </div>
   )
 }

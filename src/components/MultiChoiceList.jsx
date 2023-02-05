@@ -5,11 +5,11 @@ export const MultiChoiceList = ({
   register,
 }) => {
   return (
-    <fieldset>
+    <div className="flex flex-col gap-1">
       <legend>{name}</legend>
       <ul>
         {values.map((value) => (
-          <li key={value}>
+          <li className="flex gap-2" key={value}>
             <input
               disabled={disabled}
               type="checkbox"
@@ -21,6 +21,6 @@ export const MultiChoiceList = ({
           </li>
         ))}
       </ul>
-    </fieldset>
+    </div>
   )
 }

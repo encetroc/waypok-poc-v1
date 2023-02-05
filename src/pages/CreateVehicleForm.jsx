@@ -85,6 +85,8 @@ export const CreateVehicleForm = () => {
           <Input name="Delay" register={register} />
           <Input name="Stackable" register={register} />
         </SubSection>
+      </Section>
+      <Section name="inssurance">
         <SingleChoiceList
           name="inssurance"
           values={inssurance}

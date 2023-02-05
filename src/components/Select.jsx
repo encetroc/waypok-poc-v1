@@ -1,6 +1,6 @@
 export const Select = ({ values, name, register }) => {
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <label htmlFor={name}>{name}</label>
       <select name={name} id={name} {...register(name)}>
         <option value="">--Please choose an option--</option>
@@ -10,6 +10,6 @@ export const Select = ({ values, name, register }) => {
           </option>
         ))}
       </select>
-    </>
+    </div>
   )
 }

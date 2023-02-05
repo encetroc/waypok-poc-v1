@@ -13,7 +13,7 @@ import { StoreContext } from '@/context'
 function Root() {
   return (
     <StoreContext>
-      <div>
+      <div className="flex gap-2">
         <Link to="/">home</Link>
         <Link to="/create-vehicle">create vehicle</Link>
         <Link to="/create-stops">create trips</Link>

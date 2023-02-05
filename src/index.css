@@ -2,6 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply bg-gray-100;
+}
+
 button {
   @apply hover:bg-gray-300 text-sm border border-black px-2 rounded;
+}
+
+input,
+textarea {
+  @apply border border-gray-800 rounded;
+}
+
+select {
+  @apply border border-gray-800 rounded;
+}
+
+a {
+  @apply font-medium text-blue-600 hover:underline;
+}
+
+h1 {
+  @apply text-5xl font-bold;
+}
+
+h2 {
+  @apply text-4xl font-bold;
+}
+
+h3 {
+  @apply text-3xl font-bold;
+}
+
+h4 {
+  @apply text-2xl font-bold;
+}
+
+h5 {
+  @apply text-xl font-bold;
+}
+
+h6 {
+  @apply text-lg font-bold;
+}
+
+p {
+  @apply font-light text-gray-500;
 }
