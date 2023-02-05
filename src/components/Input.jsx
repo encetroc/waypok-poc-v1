@@ -1,11 +1,11 @@
-export const Input = ({ type, name, disabled = false, register }) => {
+export const Input = ({ type, name, register, ...rest }) => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
+    <div>
       <label htmlFor={name}>{name}</label>
       {type === 'textarea' ? (
-        <textarea disabled={disabled} id={name} {...register(name)} />
+        <textarea {...rest} id={name} {...register(name)} />
       ) : (
-        <input {...{ disabled, type }} id={name} {...register(name)} />
+        <input {...rest} type={type} id={name} {...register(name)} />
       )}
     </div>
   )

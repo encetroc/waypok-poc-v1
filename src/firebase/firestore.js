@@ -5,6 +5,7 @@ import {
   writeBatch,
   doc,
   getDocs,
+  onSnapshot,
 } from 'firebase/firestore'
 import { app } from './initApp'
 
@@ -37,6 +38,7 @@ export const createStops = async (vehicleId, stops) => {
   }
 }
 
+// TODO: delete function
 export const getVehicles = async () => {
   const querySnapshot = await getDocs(collection(db, 'vehicles'))
   const vehicles = []
@@ -44,4 +46,17 @@ export const getVehicles = async () => {
     vehicles.push(doc.id)
   })
   return vehicles
+}
+
+export const getRealtimeVehicles = () => {
+  const vehicles = []
+  const unsubscribe = onSnapshot(collection(db, 'vehicles'), (snapshot) => {
+    snapshot.forEach((doc) => {
+      vehicles.push({ id: doc.id, ...doc.data() })
+    })
+  })
+  return {
+    data: vehicles,
+    unsubscribe,
+  }
 }

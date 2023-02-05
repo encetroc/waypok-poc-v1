@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 import { useForm, useFieldArray } from 'react-hook-form'
 import { Section, Input, Select } from '@/components'
 import { createArrayOfStops } from '@/mocks'
-import { createStops, getVehicles } from '@/firebase/firestore'
-import { useEffect } from 'react'
+import { createStops } from '@/firebase/firestore'
+import { Store } from '@/context'
 
 export const CreateStopsForm = () => {
-  const [vehicles, setVehicles] = useState([])
+  const { vehicles } = useContext(Store)
   const { register, handleSubmit, control, setValue } = useForm()
   const {
     fields: stops,
@@ -17,10 +17,6 @@ export const CreateStopsForm = () => {
     control,
     name: 'stops',
   })
-
-  useEffect(() => {
-    getVehicles().then(setVehicles)
-  }, [getVehicles])
 
   const autofill = () => {
     setValue('stops', createArrayOfStops())
@@ -32,7 +28,11 @@ export const CreateStopsForm = () => {
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Section name="choose vehicle">
-        <Select values={vehicles} name="vehicle" register={register} />
+        <Select
+          values={vehicles.map((v) => v.id)}
+          name="vehicle"
+          register={register}
+        />
       </Section>
       <Section name="actions">
         <button type="submit">create</button>
@@ -52,15 +52,7 @@ export const CreateStopsForm = () => {
         <ul>
           {stops.map((stop, stopIndex) => {
             return (
-              <li
-                key={stop.id}
-                style={{
-                  border: '1px solid gray',
-                  padding: '10px',
-                  margin: '10px',
-                  backgroundColor: 'lightgray',
-                }}
-              >
+              <li key={stop.id}>
                 <div>
                   <h4>{`stop ${stopIndex}`}</h4>
                   <button type="button" onClick={() => remove(stopIndex)}>

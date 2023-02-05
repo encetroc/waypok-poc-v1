@@ -7,19 +7,21 @@ import {
   RootRoute,
 } from '@tanstack/react-router'
 
-import { CreateVehicleForm, CreateStopsForm, Home } from '@/pages'
+import { ListVehicles, CreateVehicleForm, CreateStopsForm, Home } from '@/pages'
+import { StoreContext } from '@/context'
 
 function Root() {
   return (
-    <>
-      <div style={{ display: 'flex', gap: 10 }}>
-        <Link to="/">Home</Link>
+    <StoreContext>
+      <div>
+        <Link to="/">home</Link>
         <Link to="/create-vehicle">create vehicle</Link>
         <Link to="/create-stops">create trips</Link>
+        <Link to="/list-vehicle">list vehicles</Link>
       </div>
       <hr />
       <Outlet />
-    </>
+    </StoreContext>
   )
 }
 
@@ -45,10 +47,17 @@ const createTripsRoute = new Route({
   component: CreateStopsForm,
 })
 
+const listVehiclesRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/list-vehicle',
+  component: ListVehicles,
+})
+
 const routeTree = rootRoute.addChildren([
   homeRoute,
   createVehicleRoute,
   createTripsRoute,
+  listVehiclesRoute,
 ])
 
 export const Router = () => (

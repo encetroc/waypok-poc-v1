@@ -1,13 +1,7 @@
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: lightgrey;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+button {
+  @apply hover:bg-gray-300 text-sm border border-black px-2 rounded;
 }
