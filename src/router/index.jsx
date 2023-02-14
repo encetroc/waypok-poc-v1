@@ -7,17 +7,58 @@ import {
   RootRoute,
 } from '@tanstack/react-router'
 
-import { ListVehicles, CreateVehicleForm, CreateStopsForm, Home } from '@/pages'
+import {
+  ListVehicles,
+  CreateVehicleForm,
+  Home,
+  CreateShipmentForm,
+  ListShipments,
+  BookTripForm,
+} from '@/pages'
 import { StoreContext } from '@/context'
+
+const routes = [
+  {
+    path: '/',
+    label: 'home',
+    component: Home,
+  },
+  {
+    path: '/create-vehicle',
+    label: 'create vehicle',
+    component: CreateVehicleForm,
+  },
+  {
+    path: '/list-vehicle',
+    label: 'list vehicles',
+    component: ListVehicles,
+  },
+  {
+    path: '/create-shipment',
+    label: 'create shipment',
+    component: CreateShipmentForm,
+  },
+  {
+    path: '/list-shipment',
+    label: 'list shipments',
+    component: ListShipments,
+  },
+  {
+    path: '/book-trip',
+    label: 'book trip',
+    component: BookTripForm,
+  },
+]
 
 function Root() {
   return (
     <StoreContext>
       <div className="flex gap-2">
-        <Link to="/">home</Link>
-        <Link to="/create-vehicle">create vehicle</Link>
-        <Link to="/create-stops">create trips</Link>
-        <Link to="/list-vehicle">list vehicles</Link>
+        {routes.map((route) => (
+          <Link key={route.path} to={route.path}>
+            {route.label}
+          </Link>
+        ))}
       </div>
       <hr />
       <Outlet />
@@ -29,36 +70,16 @@ const rootRoute = new RootRoute({
   component: Root,
 })
 
-const homeRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: Home,
-})
-
-const createVehicleRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/create-vehicle',
-  component: CreateVehicleForm,
-})
-
-const createTripsRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/create-stops',
-  component: CreateStopsForm,
-})
-
-const listVehiclesRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/list-vehicle',
-  component: ListVehicles,
-})
-
-const routeTree = rootRoute.addChildren([
-  homeRoute,
-  createVehicleRoute,
-  createTripsRoute,
-  listVehiclesRoute,
-])
+const routeTree = rootRoute.addChildren(
+  routes.map(
+    (route) =>
+      new Route({
+        getParentRoute: () => rootRoute,
+        path: route.path,
+        component: route.component,
+      })
+  )
+)
 
 export const Router = () => (
   <RouterProvider router={new ReactRouter({ routeTree })} />

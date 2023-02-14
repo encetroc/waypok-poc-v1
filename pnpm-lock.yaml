@@ -7,6 +7,7 @@ specifiers:
   '@types/react-dom': ^18.0.9
   '@vitejs/plugin-react': ^3.0.0
   autoprefixer: ^10.4.13
+  clsx: ^1.2.1
   date-fns: ^2.29.3
   eslint: ^8.32.0
   eslint-plugin-react: ^7.32.1
@@ -20,6 +21,7 @@ specifiers:
 
 dependencies:
   '@tanstack/react-router': 0.0.1-beta.70_biqbaboplfbrettd7655fr4n2y
+  clsx: 1.2.1
   date-fns: 2.29.3
   firebase: 9.15.0
   react: 18.2.0
@@ -1373,6 +1375,11 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/1.9.3:

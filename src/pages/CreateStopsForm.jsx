@@ -1,14 +1,14 @@
-import { useState, useContext } from 'react'
-
+/* //TODO: delete whole file
 import { useForm, useFieldArray } from 'react-hook-form'
 import { Section, Input, Select } from '@/components'
 import { createArrayOfStops } from '@/mocks'
 import { createStops } from '@/firebase/firestore'
-import { Store } from '@/context'
+import { useStore } from '@/context'
 
 export const CreateStopsForm = () => {
-  const { vehicles } = useContext(Store)
-  const { register, handleSubmit, control, setValue } = useForm()
+  const { vehicles } = useStore()
+  const { refreshStops } = useStore()
+  const { register, handleSubmit, control, setValue, reset } = useForm()
   const {
     fields: stops,
     append,
@@ -22,11 +22,16 @@ export const CreateStopsForm = () => {
     setValue('stops', createArrayOfStops())
   }
 
-  const submit = (data) => {
-    createStops(data.vehicle, data.stops)
+  const submit = async (data) => {
+    const isSuccessful = await createStops(data.vehicle, data.stops)
+    if (isSuccessful) {
+      reset()
+      refreshStops(data.vehicle)
+    }
   }
   return (
     <form onSubmit={handleSubmit(submit)}>
+      <h1>Create Stops</h1>
       <Section name="choose vehicle">
         <Select
           values={vehicles.map((v) => v.id)}
@@ -84,3 +89,4 @@ export const CreateStopsForm = () => {
     </form>
   )
 }
+ */

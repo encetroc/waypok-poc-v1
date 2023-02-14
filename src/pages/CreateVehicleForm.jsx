@@ -1,34 +1,47 @@
-import { useForm, useFieldArray } from 'react-hook-form'
-import { useContext } from 'react'
-
 import {
-  Switch,
+  Dimensions,
   Input,
   MultiChoiceList,
-  SingleChoiceList,
   Section,
+  SingleChoiceList,
   SubSection,
+  Switch,
 } from '@/components'
 import { createVehicle } from '@/firebase/firestore'
 import {
   cargoType,
-  vehicleType,
-  inssurance,
-  createRandomVehicle,
   createRandomSchedule,
+  createRandomVehicle,
+  inssurance,
+  shipmentContent,
+  vehicleType,
 } from '@/mocks'
+import { useContext } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { useStore } from '@/context'
 
 export const CreateVehicleForm = () => {
-  const { register, handleSubmit, control, setValue } = useForm()
+  const { register, handleSubmit, control, setValue, reset } = useForm()
+  const { refreshVehicles } = useStore()
+
   const autofill = () => {
     const dummyVehicle = createRandomVehicle()
     Object.entries(dummyVehicle).forEach((keyValuePair) =>
       setValue(keyValuePair[0], keyValuePair[1])
     )
   }
+
+  const submit = async (data) => {
+    const isSuccessful = await createVehicle(data)
+    if (isSuccessful) {
+      reset()
+      refreshVehicles()
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit(createVehicle)}>
-      <h1>create vehicle</h1>
+    <form onSubmit={handleSubmit(submit)}>
+      <h1>Create vehicle</h1>
       <Section name="actions">
         <button type="submit">create</button>
         <button type="button" onClick={autofill}>
@@ -59,14 +72,7 @@ export const CreateVehicleForm = () => {
           register={register}
         />
       </Section>
-      <Section name="dimensions">
-        <Input name="weight" register={register} />
-        <Input name="length" register={register} />
-        <Input name="width" register={register} />
-        <Input name="height" register={register} />
-        <Input name="volume" register={register} />
-        <Input name="area" register={register} />
-      </Section>
+      <Dimensions register={register} />
       <Section name="constrains">
         <Input name="minWeight" register={register} />
         <Input name="mindistance" register={register} />
@@ -75,11 +81,9 @@ export const CreateVehicleForm = () => {
       <Section name="pricing">
         <Input name="pricePerUnit" register={register} />
         <SubSection name="extraFees">
-          <Input name="Solid" register={register} />
-          <Input name="Liquid" register={register} />
-          <Input name="Perishable" register={register} />
-          <Input name="Fragile" register={register} />
-          <Input name="Dangerous" register={register} />
+          {shipmentContent.map((c) => (
+            <Input key={c} name={c} register={register} />
+          ))}
         </SubSection>
         <SubSection name="deductions">
           <Input name="Delay" register={register} />

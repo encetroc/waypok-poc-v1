@@ -1,22 +1,20 @@
-import { useContext } from 'react'
-
-import { Store } from '@/context'
+import { useStore } from '@/context'
+import { Vehicle } from '@/components'
 
 export const ListVehicles = () => {
-  const { vehicles } = useContext(Store)
-  return (
-    <ul>
-      {vehicles.map((vehicle) => (
-        <li key={vehicle.id}>
-          <div>
-            <span>{vehicle.id}</span>
-            <strong>{vehicle.title}</strong>
-            <button>delete</button>
-          </div>
+  const { vehicles } = useStore()
 
-          <hr />
-        </li>
-      ))}
-    </ul>
+  return (
+    <div>
+      <h1>Vehicles</h1>
+      <ul>
+        {vehicles.map((vehicle) => (
+          <li key={vehicle.id}>
+            <Vehicle vehicle={vehicle} />
+            <hr />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
