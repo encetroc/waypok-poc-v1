@@ -9,7 +9,7 @@ export const Input = ({
   ...rest
 }) => {
   return (
-    <div className={clsx('flex flex-col gap-2', className)}>
+    <div className={clsx('flex flex-col gap-2 min-w-0 flex-1', className)}>
       <label htmlFor={name}>{name}</label>
       {type === 'textarea' ? (
         <textarea {...rest} id={name} {...register(name, { required })} />

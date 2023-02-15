@@ -31,7 +31,7 @@ export const CreateStopsForm = () => {
   }
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <h1>Create Stops</h1>
+      <h3>Create Stops</h3>
       <Section name="choose vehicle">
         <Select
           values={vehicles.map((v) => v.id)}

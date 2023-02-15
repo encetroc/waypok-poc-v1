@@ -24,30 +24,30 @@ export const BookTripForm = () => {
   }, [watchDepartureStops, departueStops])
 
   const onSubmit = ({ shipment, vehicle, departureStop, arrivalStop }) => {
-    bookTrip(
-      vehicle,
-      shipment,
-      vehicles
-        .find((v) => v.id === watchVehicleSelection)
-        .stops.filter((s) => s.id === departureStop || s.id === arrivalStop)
-    )
+    const isSuccessful = bookTrip(vehicle, shipment, [
+      departureStop,
+      arrivalStop,
+    ])
+    if (isSuccessful) reset()
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Book Trip Form</h1>
-      <Section name="actions">
-        <button type="submit">book</button>
-      </Section>
+      <div className="flex justify-between items-center">
+        <h3>Book trip</h3>
+        <div className="flex gap-2">
+          <button type="submit">book</button>
+        </div>
+      </div>
       <Select
         name="shipment"
-        values={shipments.map((s) => s.id)}
+        values={shipments.filter((s) => !s.operations.length).map((s) => s.id)}
         register={register}
         required
       />
       <Select
         name="vehicle"
-        values={vehicles.map((v) => v.id)}
+        values={vehicles.filter((v) => !!v.stops.length).map((v) => v.id)}
         register={register}
         required
       />

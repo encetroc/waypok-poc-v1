@@ -53,15 +53,16 @@ const routes = [
 function Root() {
   return (
     <StoreContext>
-      <div className="flex gap-2">
+      <div className="flex gap-4 px-4 py-2 bg-slate-700">
         {routes.map((route) => (
-          <Link key={route.path} to={route.path}>
+          <Link className="text-blue-100" key={route.path} to={route.path}>
             {route.label}
           </Link>
         ))}
       </div>
-      <hr />
-      <Outlet />
+      <div className="p-4 bg-slate-100">
+        <Outlet />
+      </div>
     </StoreContext>
   )
 }

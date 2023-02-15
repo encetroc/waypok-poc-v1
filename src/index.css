@@ -6,8 +6,11 @@ body {
   @apply bg-gray-100;
 }
 
-button {
-  @apply hover:bg-gray-300 text-sm border border-black px-2 rounded;
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  @apply hover:bg-blue-400 text-sm border border-black px-3 rounded bg-blue-600 text-white;
 }
 
 input,
@@ -23,7 +26,7 @@ a {
   @apply font-medium text-blue-600 hover:underline;
 }
 
-h1 {
+h3 {
   @apply text-5xl font-bold;
 }
 

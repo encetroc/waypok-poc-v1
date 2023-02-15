@@ -20,11 +20,11 @@ export const StoreContext = ({ children }) => {
   const [vehicles, setVehicles] = useState([])
   const [shipments, setShipments] = useState([])
 
-  const refreshVehicles = () => {
+  const refreshVehicles = async () => {
     getVehicles().then(setVehicles)
   }
 
-  const refreshShipments = () => {
+  const refreshShipments = async () => {
     getShipments().then(setShipments)
   }
 

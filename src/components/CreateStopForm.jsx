@@ -52,7 +52,7 @@ export const CreateStopForm = ({ vehicleId }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-col p-5 gap-2">
+    <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-2">
       <div className="flex gap-2">
         <h6>{`create stop for vehicle ${vehicleId}`}</h6>
         <button type="submit">create</button>
@@ -63,7 +63,6 @@ export const CreateStopForm = ({ vehicleId }) => {
       <Input name="address" register={register} required />
       <div className="flex gap-2">
         <Input
-          className="flex-1"
           name="arrivalDate"
           type="date"
           placeholder={datePlaceHolder}
@@ -73,7 +72,6 @@ export const CreateStopForm = ({ vehicleId }) => {
       </div>
       <div className="flex gap-2">
         <Input
-          className="flex-1"
           name="departureDate"
           type="date"
           register={register}

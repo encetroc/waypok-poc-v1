@@ -11,7 +11,7 @@ export const ListShipments = () => {
   }
   return (
     <div>
-      <h1>Shipments</h1>
+      <h3>Shipments</h3>
       <ul>
         {shipments.map((shipment) => (
           <li key={shipment.id}>

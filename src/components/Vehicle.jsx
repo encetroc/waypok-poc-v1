@@ -21,15 +21,15 @@ export const Vehicle = ({ vehicle }) => {
           <span>{vehicle.id}</span>
           <strong>{`(${vehicle.stops.length} stops)`}</strong>
         </div>
-        <div>
+        <div className="flex gap-2 items-center">
           <button onClick={() => setIsExpanded((prev) => !prev)}>expand</button>
           <button onClick={() => handleDelete(vehicle.id)}>delete</button>
         </div>
       </div>
       {isExpanded && (
-        <div>
+        <div className="flex flex-col p-4 gap-4">
           <CreateStopForm vehicleId={vehicle.id} />
-          <ul>
+          <ul className="flex flex-col gap-2">
             {vehicle.stops.map((stop, index) => (
               <li key={stop.id}>
                 <Stop stop={stop} vehicleId={vehicle.id} />

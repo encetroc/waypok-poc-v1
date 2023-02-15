@@ -8,6 +8,7 @@ import {
   Section,
   SubSection,
   Dimensions,
+  GeneralInfo,
 } from '@/components'
 import {
   cargoType,
@@ -39,24 +40,21 @@ export const CreateShipmentForm = () => {
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      <h1>Create shipment</h1>
-      <Section name="actions">
-        <button type="submit">create</button>
-        <button type="button" onClick={autofill}>
-          autofill
-        </button>
-      </Section>
+      <div className="flex justify-between items-center">
+        <h3>Create shipment</h3>
+        <div className="flex gap-2">
+          <button type="submit">create</button>
+          <button type="button" onClick={autofill}>
+            autofill
+          </button>
+        </div>
+      </div>
       <Section name="meta">
         <Switch name="template" register={register} />
         <Switch name="publish" register={register} />
         <Switch name="autoBook" register={register} />
       </Section>
-      <Section name="general info">
-        <Input type="text" name="title" register={register} />
-        <Input type="textarea" name="description" register={register} />
-        <Input type="text" name="internalRef" register={register} />
-        <Input type="text" name="externalRef" register={register} />
-      </Section>
+      <GeneralInfo register={register} />
       <Dimensions register={register} />
       <Section name="shipment type">
         <MultiChoiceList

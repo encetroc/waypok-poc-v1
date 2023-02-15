@@ -6,7 +6,7 @@ export const ListVehicles = () => {
 
   return (
     <div>
-      <h1>Vehicles</h1>
+      <h3>Vehicles</h3>
       <ul>
         {vehicles.map((vehicle) => (
           <li key={vehicle.id}>

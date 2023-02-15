@@ -1,9 +1,11 @@
-export const Section = ({ name, children }) => {
+import clsx from 'clsx'
+
+export const Section = ({ children, name, className = 'flex-col' }) => {
   return (
     <section className="mb-4">
-      <h2>{name}</h2>
+      <h4>{name}</h4>
       <hr />
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className={clsx('flex gap-2', className)}>{children}</div>
     </section>
   )
 }
@@ -11,7 +13,7 @@ export const Section = ({ name, children }) => {
 export const SubSection = ({ name, children }) => {
   return (
     <section>
-      <h3>{name}</h3>
+      <h5>{name}</h5>
       {children}
     </section>
   )

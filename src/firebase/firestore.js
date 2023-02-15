@@ -7,6 +7,7 @@ import {
   getDocs,
   onSnapshot,
   deleteDoc,
+  getDoc,
 } from 'firebase/firestore'
 import { app } from './initApp'
 
@@ -69,6 +70,26 @@ export const createStops = async (vehicleId, stops) => {
   }
 }
 
+export const getShipmentFromRef = async (shipmentRef) => {
+  const shipment = await getDoc(shipmentRef)
+  return { id: shipment.id, ...shipment.data() }
+}
+
+export const getStopOperations = async (stopId, vehicleId) => {
+  const querySnapshot = await getDocs(
+    collection(db, `vehicles/${vehicleId}/stops/${stopId}/stopOperations`)
+  )
+  const operations = []
+  querySnapshot.forEach((doc) => {
+    operations.push({ id: doc.id, ...doc.data() })
+  })
+  operations.map(async (operation) => {
+    const shipment = await getShipmentFromRef(operation.shipmentDoc)
+    operation.shipment = shipment
+  })
+  return operations
+}
+
 export const getStops = async (vehicleId) => {
   const querySnapshot = await getDocs(
     collection(db, `vehicles/${vehicleId}/stops`)
@@ -76,6 +97,10 @@ export const getStops = async (vehicleId) => {
   const stops = []
   querySnapshot.forEach((doc) => {
     stops.push({ id: doc.id, ...doc.data() })
+  })
+  stops.map(async (stop) => {
+    const operations = await getStopOperations(stop.id, vehicleId)
+    stop.operations = operations
   })
   return stops
 }
@@ -95,13 +120,22 @@ export const getVehicles = async () => {
   return vehicles
 }
 
-const getOperations = async (shipmentId) => {
+export const getStopFromRef = async (stopRef) => {
+  const stop = await getDoc(stopRef)
+  return { id: stop.id, ...stop.data() }
+}
+
+const getShipmentOperations = async (shipmentId) => {
   const querySnapshot = await getDocs(
-    collection(db, `shipments/${shipmentId}/operations`)
+    collection(db, `shipments/${shipmentId}/shipmentOperations`)
   )
   const operations = []
   querySnapshot.forEach((doc) => {
     operations.push({ id: doc.id, ...doc.data() })
+  })
+  operations.map(async (operation) => {
+    const stop = await getStopFromRef(operation.stopDoc)
+    operation.stop = stop
   })
   return operations
 }
@@ -113,9 +147,10 @@ export const getShipments = async () => {
     shipments.push({ id: doc.id, ...doc.data() })
   })
   shipments.map(async (shipment) => {
-    const operations = await getOperations(shipment.id)
+    const operations = await getShipmentOperations(shipment.id)
     shipment.operations = operations
   })
+
   return shipments
 }
 
@@ -152,73 +187,58 @@ export const deleteStop = async (vehicleId, stopId) => {
   }
 }
 
-const makeTrip = (stopId, vehicleId, time, operation) => {
-  return {
-    stopId,
-    arrivalDateTime: time,
-    isDone: false,
+const makeStopOpreation = (stopId, shipmentId, operation) => [
+  stopId,
+  {
+    shipmentDoc: doc(db, `shipments/${shipmentId}`),
+    isCompleted: false,
     operation,
-    vehicleId,
-  }
-}
+  },
+]
 
-const makeShipmentInStop = (shipmentId, time, operation) => {
-  return {
-    shipmentId,
-    arrivalDateTime: time,
-    isDone: false,
-    operation,
-  }
-}
+const makeShipmentOpreation = (stopId, vehicleId, operation) => ({
+  stopDoc: doc(db, `vehicles/${vehicleId}/stops`, stopId),
+  vehicleDoc: doc(db, `vehicles/${vehicleId}`),
+  isCompleted: false,
+  operation,
+})
 
-export const bookTrip = async (vehicleId, shipmentId, stops) => {
-  const operations = stops.map((stop, i) => {
-    if (i === 0)
-      return makeTrip(stop.id, vehicleId, stop.departureDateTime, 'pickup')
-    if (i === stops.length - 1)
-      return makeTrip(stop.id, vehicleId, stop.arrivalDateTime, 'dropoff')
-    return [
-      makeTrip(stop.id, vehicleId, stop.arrivalDateTime, 'dropoff'),
-      makeTrip(stop.id, vehicleId, stop.departureDateTime, 'pickup'),
-    ]
+export const bookTrip = async (vehicleId, shipmentId, stopIds) => {
+  let shipmentOperations = stopIds.map((stopId, i) => {
+    if (i === 0) return makeShipmentOpreation(stopId, vehicleId, 'pickup')
+    return makeShipmentOpreation(stopId, vehicleId, 'dropoff')
   })
+  const shipmentOperationsRefs = shipmentOperations.map((op) =>
+    doc(collection(db, `shipments/${shipmentId}/shipmentOperations`))
+  )
+
+  let stopOperations = stopIds.map((stopId, i) => {
+    if (i === 0) return makeStopOpreation(stopId, shipmentId, 'pickup')
+    return makeStopOpreation(stopId, shipmentId, 'dropoff')
+  })
+  const stopOperationsRefs = stopOperations.map((op) =>
+    doc(collection(db, `vehicles/${vehicleId}/stops/${op[0]}/stopOperations`))
+  )
+
+  shipmentOperations = shipmentOperations.map((op, i) => ({
+    ...op,
+    stopOperationsRefs: stopOperationsRefs[i],
+  }))
+  stopOperations = stopOperations.map((op, i) => [
+    op[0],
+    {
+      ...op[1],
+      shipmentOperationsRefs: shipmentOperationsRefs[i],
+    },
+  ])
 
   try {
     const batch = writeBatch(db)
-
-    stops.forEach((stop, i) => {
-      if (i === 0)
-        batch.set(
-          doc(
-            collection(db, `vehicles/${vehicleId}/stops/${stop.id}/shipments`)
-          ),
-          makeShipmentInStop(shipmentId, stop.departureDateTime, 'pickup')
-        )
-      else if (i === stops.length - 1)
-        batch.set(
-          doc(
-            collection(db, `vehicles/${vehicleId}/stops/${stop.id}/shipments`)
-          ),
-          makeShipmentInStop(shipmentId, stop.arrivalDateTime, 'dropoff')
-        )
-      else {
-        batch.set(
-          doc(
-            collection(db, `vehicles/${vehicleId}/stops/${stop.id}/shipments`)
-          ),
-          makeShipmentInStop(shipmentId, stop.arrivalDateTime, 'dropoff')
-        )
-        batch.set(
-          doc(
-            collection(db, `vehicles/${vehicleId}/stops/${stop.id}/shipments`)
-          ),
-          makeShipmentInStop(shipmentId, stop.departureDateTime, 'pickup')
-        )
-      }
+    shipmentOperations.forEach((op, i) => {
+      batch.set(shipmentOperationsRefs[i], op)
     })
-
-    operations.flat().forEach((stop) => {
-      batch.set(doc(collection(db, `shipments/${shipmentId}/operations`)), stop)
+    stopOperations.forEach((op, i) => {
+      batch.set(stopOperationsRefs[i], op[1])
     })
     await batch.commit()
     console.log('stops created for shipment', shipmentId)
@@ -227,4 +247,33 @@ export const bookTrip = async (vehicleId, shipmentId, stops) => {
     console.error('Error adding document: ', e)
     return false
   }
+}
+
+export const cancelShipmentOperation = async (shipmentId, operations) => {
+  try {
+    const batch = writeBatch(db)
+    operations.forEach((op) => {
+      batch.delete(doc(db, `shipments/${shipmentId}/shipmentOperations`, op.id))
+      batch.delete(op.stopOperationsRefs)
+    })
+    await batch.commit()
+    console.log('shipment operations cancelled', shipmentId)
+    return true
+  } catch (e) {
+    console.error('Error deleting documents: ', e)
+    return false
+  }
+}
+
+export const completeOperation = async (
+  stopOperationPath,
+  shipmentOperationRef
+) => {
+  const batch = writeBatch(db)
+  batch.update(doc(db, stopOperationPath), {
+    isCompleted: true,
+  })
+  batch.update(shipmentOperationRef, { isCompleted: true })
+  await batch.commit()
+  console.log('operation completed')
 }
