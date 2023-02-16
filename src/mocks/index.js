@@ -84,52 +84,6 @@ export const createRandomShipment = () => {
   }
 }
 
-export const createRandomSchedule = () => {
-  const emptyTrips = new Array(faker.datatype.number({ min: 2, max: 3 })).fill(
-    0
-  )
-  const dates = faker.date.betweens(
-    new Date(),
-    add(new Date(), { months: 1 }),
-    emptyTrips.length * 2
-  )
-  const trips = emptyTrips.map((t) => {
-    return {
-      stops: [createRandomStop(dates.shift()), createRandomStop(dates.shift())],
-    }
-  })
-  return trips
-}
-
-export const createArrayOfStops = () => {
-  const emptyStops = new Array(faker.datatype.number({ min: 2, max: 2 })).fill(
-    0
-  )
-  const dates = faker.date.betweens(
-    new Date(),
-    add(new Date(), { months: 1 }),
-    emptyStops.length
-  )
-
-  return emptyStops.map((stop) => createRandomStop(dates.shift()))
-}
-
-export const createRandomStop1 = (arrivalDateTime) => {
-  return {
-    address: faker.address.nearbyGPSCoordinate(
-      [33.5724108, -7.6570324],
-      200,
-      true
-    ),
-    arrivalDateTime: arrivalDateTime.toISOString().substr(0, 16),
-    departureDateTime: add(new Date(arrivalDateTime), {
-      hours: 1,
-    })
-      .toISOString()
-      .substr(0, 16),
-  }
-}
-
 export const createRandomStop = () => {
   const randomDate = faker.date.between(
     new Date(),

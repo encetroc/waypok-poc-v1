@@ -49,27 +49,6 @@ export const createShipment = async (shipment) => {
   }
 }
 
-//TODO: delete
-export const createStops = async (vehicleId, stops) => {
-  if (vehicleId === '') return
-  try {
-    const batch = writeBatch(db)
-    stops.forEach((stop) => {
-      batch.set(doc(collection(db, `vehicles/${vehicleId}/stops`)), {
-        address: stop.address,
-        arrivalDateTime: new Date(stop.arrivalDateTime),
-        departureDateTime: new Date(stop.departureDateTime),
-      })
-    })
-    await batch.commit()
-    console.log('stops created for vehicle', vehicleId)
-    return true
-  } catch (e) {
-    console.error('Error adding document: ', e)
-    return false
-  }
-}
-
 export const getShipmentFromRef = async (shipmentRef) => {
   const shipment = await getDoc(shipmentRef)
   return { id: shipment.id, ...shipment.data() }

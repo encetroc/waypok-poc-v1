@@ -11,7 +11,6 @@ import {
 import { createVehicle } from '@/firebase/firestore'
 import {
   cargoType,
-  createRandomSchedule,
   createRandomVehicle,
   inssurance,
   shipmentContent,
